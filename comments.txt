@@ -1,0 +1,31 @@
+Total 100/100
+
+=== Part 1: Project Description (15/15) ===
+
+Good.
+
+==== Part 2: Project Implementation (15/15)
+
+- You can share whiteboards by sharing URLs like pastebin.
+
+- The division of work is unclear. I am expecting to do a better job during the project.
+
+- The challenge of your project relies on the use of RPC. Make sure to deliver that.
+
+=== Part 3: User Interface (40/30) ===
+
+Good.
+
+=== Part 4: Data structure (20/20) ===
+
+Good.
+
+=== Part 5: URLs map (20/20) ===
+
+Good.
+
+
+
+
+
+
