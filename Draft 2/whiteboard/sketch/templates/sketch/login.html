@@ -1,0 +1,26 @@
+{% extends "sketch/index.html" %}
+
+{% block content %}
+
+{% if form.errors %}
+<p class="error">Your username and password didn't match. Please try again.</p>
+{% endif %}
+<div id="heading">
+<h2> Login </h2>
+
+<form method="post" action="{% url 'auth_view'  %}">
+	{% csrf_token %}
+	<div class="field-title">
+	<label for="username">User name:</label><br>
+	<input type="text" name="username" value="" id="username"><br>
+</div>
+	<div class="field-title">
+	<label for="password">Password:</label><br>
+	<input type="password" name="password" value="" id="password"><br>
+</div>
+<div id="submit">
+	<input type="submit" class="btn btn-default navbar-btn" value="Login">
+</div>
+</form>
+</div>
+{% endblock %}
