@@ -16,8 +16,13 @@ urlpatterns = patterns('',
                        #url(r'^sketch/$', views.sketch, name='sketch'),
                        url(r'^project/$', views.project, name='project'),
                        url(r'^add_project/$', views.add_project, name='add_project'),
-                       url(r'^sketch/(?P<project_id>\w+)/$',
+                       url(r'^sketch/(?P<project_id>\w+)/(?P<sketch_id>\w+)/$',
                            views.sketch,
                            name='sketch'),
+
+                       url(r'^loadSketch/$', views.loadSketch, name='loadSketch'),
+                       url(r'^saveSketch/$', views.saveSketch, name='saveSketch'),
+
+
 
 )

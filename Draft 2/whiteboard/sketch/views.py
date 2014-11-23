@@ -1,3 +1,4 @@
+import random
 from django.shortcuts import render
 from django.core.context_processors import csrf
 from django.http import HttpResponse, HttpResponseRedirect
@@ -25,11 +26,14 @@ def project(request):
 
 
 @csrf_exempt
-def sketch(request, project_id):
+@login_required(login_url="/sketch/login/")
+def sketch(request, project_id, sketch_id):
     c = {}
     c.update(csrf(request))
 
-    return render_to_response('sketch/sketch.html', {'project_id': project_id})
+    return render_to_response('sketch/sketch.html',
+                              {'project_id': project_id, 'sketch_id': sketch_id, 'user_id': request.user.username})
+
 
 @csrf_exempt
 @login_required(login_url="/sketch/login/")
@@ -37,8 +41,9 @@ def add_project(request):
     p = Project(name=request.POST['projectName'])
     p.save()
 
+    tempName = request.user.username;
     s = Sketch(project=p,
-               clickMap=json.dumps({}))
+               clickMap=json.dumps({tempName: [[], [], [], []]}))
     s.save()
 
     b = Bridge(user=request.user,
@@ -47,8 +52,7 @@ def add_project(request):
 
     temp = p.name + "_" + str(p.id)
 
-    return HttpResponseRedirect(reverse('sketch', kwargs={'project_id': temp}))
-
+    return HttpResponseRedirect(reverse('sketch', kwargs={'project_id': temp, 'sketch_id': str(s.id)}))
 
 
 @csrf_exempt
@@ -96,3 +100,21 @@ def register_user(request):
 
 def register_success(request):
     return HttpResponseRedirect(reverse('index'))
+
+@csrf_exempt
+@login_required(login_url="/sketch/login/")
+def loadSketch(request):
+    s = Sketch.objects.get(id=int(request.POST['sketch_id']))
+    click_map = s.clickMap
+    print click_map
+
+    return HttpResponse(click_map, content_type="application/json")
+
+@csrf_exempt
+@login_required(login_url="/sketch/login/")
+def saveSketch(request):
+    s = Sketch.objects.get(id=int(request.POST['sketch_id']))
+    s.clickMap = request.POST['clickMap']
+    s.save()
+
+    return HttpResponse()
