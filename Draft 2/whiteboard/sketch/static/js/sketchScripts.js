@@ -4,4 +4,8 @@ $(document).ready(function(){
 /*     $("#drawing > #erase").click(resetCanvas);
     $("#drawing > #slow").click(function(){redrawSlow(0);}); */
 
+    $("#add_sketch").click(function(){
+        $("#formGamma").submit();
+    });
+
 });

@@ -13,7 +13,7 @@ function loadSketch(sketch_id){
         sketch_id: sketch_id
     }, function(data) {
         var result = data;
-        console.log(result);
+        //console.log(result);
         prepareCanvas(result);
     });
 
@@ -52,9 +52,9 @@ var currentColor = "#000000";
 
 function addClick(clickMap, x, y, dragging, color, user_id)
 {
-    console.log(user_id in clickMap);
+    //console.log(user_id in clickMap);
     if(user_id in clickMap){
-        console.log(user_id);
+        //console.log(user_id);
         clickMap[user_id][0].push(x);
         clickMap[user_id][1].push(y);
         clickMap[user_id][2].push(dragging);
@@ -73,17 +73,25 @@ function prepareCanvas(clickMap){
     var canvas = $("#"+sketch_id)[0];
     var context = canvas.getContext("2d");
     // clearCanvas();
-    console.log(clickMap);
+    //console.log(clickMap);
     context = redraw_start(clickMap, context);
 	
 	channel.onmessage = function(data, userid, latency) {
 
-					//console.debug(userid, 'posted', data);
-					var z = JSON.parse(data);
-                    console.log(z[0]);
-					clickMap = addClick(clickMap, z[1],z[2],z[3],z[4], z[0]);
-					context = redraw(clickMap, context);
-					//console.log('latency:', latency, 'ms');
+                    if(data=="clearCanvas"){
+                        context = clearCanvas(context,canvas);
+                    }
+
+                    else{
+                        //console.debug(userid, 'posted', data);
+                        var z = JSON.parse(data);
+                        //console.log(z[0]);
+                        clickMap = addClick(clickMap, z[1],z[2],z[3],z[4], z[0]);
+                        context = redraw(clickMap, context);
+                        //console.log('latency:', latency, 'ms');
+                    }
+
+
 	
                 };
 
@@ -117,6 +125,17 @@ function prepareCanvas(clickMap){
       paint = false;
         saveSketch(sketch_id, clickMap);
     });
+
+    $("#erase_sketch").click(function(){
+
+        /*z = z.split(" ")
+        alert(z[0]);*/
+        context = clearCanvas(context, canvas);
+        clickMap = {};
+        saveSketch(sketch_id,clickMap);
+        setTimeout(function(){channel.send("clearCanvas");}, 0);
+
+    })
 }
 
 function redraw(clickMap, context){
@@ -201,11 +220,14 @@ function partialRedraw(k){
       }
 }
 
-function clearCanvas(){
+*/
+
+function clearCanvas(context, canvas){
     context.clearRect(0, 0, canvas.width, canvas.height);
+    return context
 }
 
-function resetCanvas()
+/*function resetCanvas()
 {
     clickX=[];
     clickY=[];

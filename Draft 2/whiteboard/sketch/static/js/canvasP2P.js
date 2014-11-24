@@ -13,4 +13,17 @@ $(document).ready(function(){
 						console.log('CONNECTED!');
 					};
 
+/*    channel.onclose = function(event) {
+
+        setTimeout(function(){
+
+            channel = new DataChannel();
+	        channel.firebase = 'webrtc-experiment';
+	        channel.open(project_id || 'channel');
+
+
+        }, 0);
+
+    }*/
+
 });

@@ -65,11 +65,26 @@
 			<div id="content">
 				<p> You can use Whiteboard in these environments: </p>
 				<div id="classroom" class="col-sm-3 col-lg-3 col-md-3">
-				        <form id="formAlpha" enctype="multipart/form-data" action="{% url 'add_project' %}" method="post">{% csrf_token %}
-							<div><label for='projectName'>Project Name</label><input type="text" name="projectName"/></div>
-						</form>
-						<div><label for='content'><a href="#" id="publishButton">Publish</a></label></div>
-				                    </div>
+                    <form id="formAlpha" enctype="multipart/form-data" action="{% url 'add_project' %}" method="post">{% csrf_token %}
+                        <div><label for='projectName'>Project Name</label><input type="text" name="projectName"/></div>
+                    </form>
+                    <div><label for='content'><a href="#" id="publishButton">Publish</a></label></div>
+                </div>
+
+                <div id="classroom" class="col-sm-3 col-lg-3 col-md-3">
+                    <p>Select from Existing Projects:</p>
+
+                    <form id="formBeta" enctype="multipart/form-data" action="{% url 'select_project' %}" method="post">{% csrf_token %}
+                        <div><label for='projectName'></label><input id="project_input" type="hidden" name="projectName" value = ""/></div>
+                    </form>
+
+                    {% for bridge in bridges_list %}
+
+                        <button id="{{ bridge.project.name }}" class="project_button">{{ bridge.project.name }}</button>
+
+                    {% endfor %}
+
+				</div>
 
 			</div>
 			
