@@ -23,10 +23,15 @@ urlpatterns = patterns('',
 
                        url(r'^loadSketch/$', views.loadSketch, name='loadSketch'),
                        url(r'^saveSketch/$', views.saveSketch, name='saveSketch'),
+
                        url(r'^contact/$', views.contact, name='contact'),
                         url(r'^contactform/$', views.contactform, name='contactform'),
                        url(r'^about/$', views.about, name='about'),
                        url(r'^privacy/$', views.privacy, name='privacy'),
+
+                       url(r'^select_project/$', views.select_project, name='select_project'),
+                       url(r'^add_sketch/$', views.add_sketch, name='add_sketch'),
+
 
 
 

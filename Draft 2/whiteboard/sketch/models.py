@@ -17,7 +17,7 @@ class Bridge(models.Model):
 
 
 class Sketch(models.Model):
-    project = models.ForeignKey(Project, unique=True, null=False)
+    project = models.ForeignKey(Project, unique=False, null=False)
     clickMap = models.TextField()
 
     def __unicode__(self):
