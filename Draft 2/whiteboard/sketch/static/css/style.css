@@ -2,6 +2,10 @@
 	padding-left:2%;
 	margin-bottom:2%;
 }
+#pages{
+	padding-right:10%;
+	padding-left:2%;
+}
 #nav-bar{
 	margin:0;
 }
@@ -62,6 +66,9 @@ div.field-title label {
 	
 	max-width:950px;
 	background-color:#e7e7e7;
+}
+#usernav{
+	padding:1%;
 }
 #footer a{
 	color:#777;

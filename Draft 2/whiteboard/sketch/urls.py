@@ -12,6 +12,7 @@ urlpatterns = patterns('',
                        url(r'^logout/$', views.logout_view, name='logout'),
                        url(r'^register/$', views.register_user, name='register_user'),
                        url(r'^register_success/$', views.register_success),
+                       
 
                        #url(r'^sketch/$', views.sketch, name='sketch'),
                        url(r'^project/$', views.project, name='project'),
@@ -22,6 +23,10 @@ urlpatterns = patterns('',
 
                        url(r'^loadSketch/$', views.loadSketch, name='loadSketch'),
                        url(r'^saveSketch/$', views.saveSketch, name='saveSketch'),
+                       url(r'^contact/$', views.contact, name='contact'),
+                        url(r'^contactform/$', views.contactform, name='contactform'),
+                       url(r'^about/$', views.about, name='about'),
+                       url(r'^privacy/$', views.privacy, name='privacy'),
 
 
 

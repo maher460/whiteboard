@@ -15,6 +15,8 @@ from django.contrib.auth.decorators import permission_required
 import datetime
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.core.mail import send_mail, BadHeaderError
+from django.template import RequestContext, Context
 
 # Create your views here.
 
@@ -59,7 +61,10 @@ def add_project(request):
 def index(request):
     c = {}
     c.update(csrf(request))
-    return render_to_response('sketch/index.html', {})
+    see="haha"
+    print request.user
+    print request.user.username
+    return render_to_response('sketch/index.html', {'see':see})
 
 
 def login(request):
@@ -67,7 +72,29 @@ def login(request):
     c.update(csrf(request))
     return render_to_response('sketch/login.html', c)
 
+def contact(request):
+    return render_to_response('sketch/contact.html', {})
 
+@csrf_exempt    
+def contactform(request):
+    name = request.POST.get('username', '')
+    email = request.POST.get('email', '')
+    comment = request.POST.get('comment', '')
+    if name and email and comment:
+        send_mail(username, email, comment, ['maryamf@qatar.cmu.edu'])
+        return HttpResponseRedirect('sketch/index.html')
+            
+    else:
+        
+    	return HttpResponseRedirect(reverse('index'))
+  
+
+def about(request):
+    return render_to_response('sketch/about.html', {})
+    
+def privacy(request):
+    return render_to_response('sketch/privacy.html', {})
+    
 @csrf_exempt
 def auth_view(request):
     username = request.POST.get('username', '')
@@ -75,12 +102,14 @@ def auth_view(request):
     user = auth.authenticate(username=username, password=password)
     if user is not None:
         auth.login(request, user)
-        return HttpResponseRedirect(reverse('index'))
+        return HttpResponseRedirect(reverse('project'))
     else:
         return HttpResponseRedirect(reverse('login'))
 
 
 def logout_view(request):
+    print request.user
+    
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
 
