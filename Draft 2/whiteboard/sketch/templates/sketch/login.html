@@ -5,9 +5,10 @@
 {% if form.errors %}
 <p class="error">Your username and password didn't match. Please try again.</p>
 {% endif %}
+<div id="pagec" class="container">
 <div id="heading">
 <h2> Login </h2>
-
+<br>
 <form method="post" action="{% url 'auth_view'  %}">
 	{% csrf_token %}
 	<div class="field-title">
@@ -22,5 +23,6 @@
 	<input type="submit" class="btn btn-default navbar-btn" value="Login">
 </div>
 </form>
+</div>
 </div>
 {% endblock %}

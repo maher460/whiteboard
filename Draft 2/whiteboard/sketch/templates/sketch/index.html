@@ -15,6 +15,8 @@
   	<script type="text/javascript" src="{% static "js/canvasP2P.js" %}"></script>
   	<script type="text/javascript" src="{% static "js/canvas.js" %}"></script>
   	<script type="text/javascript" src="{% static "js/sketchScripts.js" %}"></script>
+      <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
+      <script type="text/javascript" src="{% static "js/projectScripts.js" %}"></script>
 	  	
 		<link href="{% static "css/business-frontpage.css" %}" rel="stylesheet" type="text/css" />
 		<link href="{% static "css/style.css" %}" rel="stylesheet" type="text/css" />
@@ -76,7 +78,7 @@
         </div>
     </header>
 	
-    <div class="container">
+    <div id="pagec" class="container">
 
         
 
@@ -84,7 +86,7 @@
             
 			<div id="content">
 				<p> You can use Whiteboard in these environments: </p>
-				<div id="classroom" class="col-sm-3 col-lg-3 col-md-3">
+				<div id="classroom" class="col-sm-4 col-lg-4 col-md-4">
 				                        <div class="thumbnail">
 				                            <img src="{% static "img/classroom.jpg" %}" alt="">
 				                            <div class="caption">
@@ -93,7 +95,7 @@
 				                            </div>
 				                        </div>
 				                    </div>
-				<div id="work" class="col-sm-3 col-lg-3 col-md-3">
+				<div id="work" class="col-sm-4 col-lg-4 col-md-4">
 				                        <div class="thumbnail">
 				                            <img src="{% static "img/work.jpg" %}" alt="">
 				                            <div class="caption">
@@ -102,7 +104,7 @@
 				                            </div>
 				                        </div>
 				                    </div>
-				<div id="project" class="col-sm-3 col-lg-3 col-md-3">
+				<div id="project" class="col-sm-4 col-lg-4 col-md-4">
 				                        <div class="thumbnail">
 				                            <img src="{% static "img/project.jpg" %}" alt="">
 				                            <div class="caption">
