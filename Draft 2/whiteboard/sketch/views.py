@@ -26,6 +26,21 @@ def project(request):
     bridges_list = Bridge.objects.filter(user=request.user)
     return render_to_response('sketch/project.html', {'bridges_list': bridges_list})
 
+def contact(request):
+    return render_to_response('sketch/contact.html', {})
+
+def contactform(request):
+    name = request.POST.get('name', '')
+    email = request.POST.get('email', '')
+    comment = request.POST.get('comment', '')
+    send_mail(name, email, comment,
+        ['to@example.com'], fail_silently=False)
+def about(request):
+    return render_to_response('sketch/about.html', {})
+   
+def privacy(request):
+    return render_to_response('sketch/privacy.html', {})
+       
 
 @csrf_exempt
 @login_required(login_url="/sketch/login/")
