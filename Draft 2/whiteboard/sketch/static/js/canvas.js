@@ -69,12 +69,24 @@ function addClick(clickMap, x, y, dragging, color, user_id)
 }
 
 function prepareCanvas(clickMap){
-    var sketch_id = $(".sketch")[0].id;
+    //var sketch_id = $(".sketch")[0].id;
     var canvas = $("#"+sketch_id)[0];
     var context = canvas.getContext("2d");
     // clearCanvas();
     //console.log(clickMap);
     context = redraw_start(clickMap, context);
+
+    if(clickMap[user_id]!=undefined){
+        if(clickMap[user_id][3]){
+            currentColor = clickMap[user_id][3][0];
+        }
+        else{
+            currentColor = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+        }
+    }
+    else{
+            currentColor = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+    }
 	
 	channel.onmessage = function(data, userid, latency) {
 
@@ -86,8 +98,11 @@ function prepareCanvas(clickMap){
                         //console.debug(userid, 'posted', data);
                         var z = JSON.parse(data);
                         //console.log(z[0]);
-                        clickMap = addClick(clickMap, z[1],z[2],z[3],z[4], z[0]);
-                        context = redraw(clickMap, context);
+                        if(z[5]==sketch_id){
+                            clickMap = addClick(clickMap, z[1],z[2],z[3],z[4], z[0]);
+                            context = redraw(clickMap, context);
+                        }
+
                         //console.log('latency:', latency, 'ms');
                     }
 
@@ -102,7 +117,7 @@ function prepareCanvas(clickMap){
           paint = true;
           clickMap = addClick(clickMap, e.pageX - $(this).offset().left, e.pageY - $(this).offset().top, false, currentColor, user_id);
           context = redraw(clickMap, context);
-		  var jsonclicks = JSON.stringify([user_id, e.pageX - $(this).offset().left, e.pageY - $(this).offset().top, false, currentColor]);
+		  var jsonclicks = JSON.stringify([user_id, e.pageX - $(this).offset().left, e.pageY - $(this).offset().top, false, currentColor, sketch_id]);
 		  setTimeout(function(){channel.send(jsonclicks);}, 0);
 		  
     });
@@ -111,7 +126,7 @@ function prepareCanvas(clickMap){
       if(paint){
         clickMap = addClick(clickMap, e.pageX - $(this).offset().left, e.pageY - $(this).offset().top, true, currentColor, user_id);
         context = redraw(clickMap, context);
-		var jsonclicks = JSON.stringify([user_id, e.pageX - $(this).offset().left, e.pageY - $(this).offset().top, true, currentColor]);
+		var jsonclicks = JSON.stringify([user_id, e.pageX - $(this).offset().left, e.pageY - $(this).offset().top, true, currentColor, sketch_id]);
 		setTimeout(function(){channel.send(jsonclicks);}, 0);
       }
     });
@@ -135,7 +150,20 @@ function prepareCanvas(clickMap){
         saveSketch(sketch_id,clickMap);
         setTimeout(function(){channel.send("clearCanvas");}, 0);
 
-    })
+    });
+
+    $("#redraw_slow").click(function(){
+
+        var m = 0;
+        for(var key in clickMap){
+            var value = clickMap[key];
+            if(value[0].length>m) m = value[0].length;
+        }
+
+        context = clearCanvas(context, canvas);
+        context = redrawSlow(0, m, context,clickMap);
+
+    });
 }
 
 function redraw(clickMap, context){
@@ -195,15 +223,48 @@ function redraw_start(clickMap, context){
 
 }
 
-/*
-function redrawSlow(k){
+
+function redrawSlow(k, m, context, clickMap){
+    //console.log("recursion!");
     setTimeout(function(){
-        partialRedraw(k);
-        if (k<clickX.length) redrawSlow(k+1);
-    },100);
+        context = redraw_slow(k, context, clickMap);
+        if (k<m) context = redrawSlow(k+1, m, context, clickMap);
+    },50);
+    return context;
 }
 
-function partialRedraw(k){
+function redraw_slow(k, context, clickMap){
+  //clearCanvas();
+  context.lineJoin = "round";
+  context.lineWidth = 5;
+    for(var key in clickMap){
+        var value = clickMap[key];
+        var clickX = value[0];
+        var clickY = value[1];
+        var clickDrag = value[2];
+        var clickColor = value[3];
+
+        if(k>1){var x = k - 2;}
+        else{var x = 0;}
+
+        for(var i=x; i < clickX.length && i<k; i++)
+      {
+        if(clickDrag[i]){
+                  context.beginPath();
+                  context.moveTo(clickX[i-1], clickY[i-1]);
+                  context.lineTo(clickX[i], clickY[i]);
+                  context.closePath();
+                  context.strokeStyle = clickColor[i];
+                  context.stroke();
+        }
+      }
+    }
+
+    return context;
+
+}
+
+/*function partialRedraw(k){
   clearCanvas();
   context.lineJoin = "round";
   context.lineWidth = 5;
@@ -218,9 +279,9 @@ function partialRedraw(k){
                   context.stroke();
         }
       }
-}
+}*/
 
-*/
+
 
 function clearCanvas(context, canvas){
     context.clearRect(0, 0, canvas.width, canvas.height);

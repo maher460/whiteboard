@@ -15,8 +15,6 @@ from django.contrib.auth.decorators import permission_required
 import datetime
 from django.views.decorators.csrf import csrf_exempt
 import json
-from django.core.mail import send_mail, BadHeaderError
-from django.template import RequestContext, Context
 
 # Create your views here.
 
@@ -31,12 +29,21 @@ def project(request):
 
 @csrf_exempt
 @login_required(login_url="/sketch/login/")
-def sketch(request, project_id, sketch_id):
+def sketch(request, project_id):
     c = {}
     c.update(csrf(request))
 
+    p = Project.objects.get(name=project_id)
+
+    sketch_list = Sketch.objects.filter(project=p)
+
+    sketch_id = str(sketch_list[0].id)
+
+    project_id = p.name + "_id_" + str(p.id)
+
     return render_to_response('sketch/sketch.html',
-                              {'project_id': project_id, 'sketch_id': sketch_id, 'user_id': request.user.username})
+                              {'project_id': project_id, 'sketch_list': sketch_list, 'sketch_id': sketch_id,
+                               'user_id': request.user.username})
 
 
 @csrf_exempt
@@ -47,38 +54,34 @@ def add_project(request):
 
     tempName = request.user.username
     s = Sketch(project=p,
-               clickMap=json.dumps({tempName: [[], [], [], []]}))
+              # clickMap=json.dumps({tempName: [[], [], [], []]}))
+              clickMap=json.dumps({}))
     s.save()
 
     b = Bridge(user=request.user,
                project=p)
     b.save()
 
-    temp = p.name + "_" + str(p.id)
+    # temp = p.name + "_" + str(p.id)
 
-    return HttpResponseRedirect(reverse('sketch', kwargs={'project_id': temp, 'sketch_id': str(s.id)}))
+    return HttpResponseRedirect(reverse('sketch', kwargs={'project_id': p.name}))
 
 
 @csrf_exempt
 @login_required(login_url="/sketch/login/")
 def select_project(request):
     p = Project.objects.get(name=request.POST['projectName'])
-    sketch_id = str(Sketch.objects.filter(project=p)[0].id)
-    project_id = p.name + "_" + str(p.id)
+    # sketch_id = str(Sketch.objects.filter(project=p)[0].id)
+    project_id = p.name  # + "_" + str(p.id)
 
-    return HttpResponseRedirect(reverse('sketch', kwargs={'project_id': project_id, 'sketch_id': sketch_id}))
-
+    return HttpResponseRedirect(reverse('sketch', kwargs={'project_id': project_id}))
 
 
 @csrf_exempt
 def index(request):
     c = {}
     c.update(csrf(request))
-    see="haha"
-    print request.user
-    print request.user.username
-    ########### if true or false
-    return render_to_response('sketch/index.html', {'see':see})
+    return render_to_response('sketch/index.html', {})
 
 
 def login(request):
@@ -86,29 +89,7 @@ def login(request):
     c.update(csrf(request))
     return render_to_response('sketch/login.html', c)
 
-def contact(request):
-    return render_to_response('sketch/contact.html', {})
 
-@csrf_exempt    
-def contactform(request):
-    name = request.POST.get('username', '')
-    email = request.POST.get('email', '')
-    comment = request.POST.get('comment', '')
-    if name and email and comment:
-        send_mail(name, email, comment, ['maryamf@qatar.cmu.edu'])
-        return HttpResponseRedirect('sketch/index.html')
-            
-    else:
-        
-    	return HttpResponseRedirect(reverse('index'))
-  
-
-def about(request):
-    return render_to_response('sketch/about.html', {})
-    
-def privacy(request):
-    return render_to_response('sketch/privacy.html', {})
-    
 @csrf_exempt
 def auth_view(request):
     username = request.POST.get('username', '')
@@ -122,8 +103,6 @@ def auth_view(request):
 
 
 def logout_view(request):
-    print request.user
-    
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
 
@@ -144,6 +123,7 @@ def register_user(request):
 def register_success(request):
     return HttpResponseRedirect(reverse('index'))
 
+
 @csrf_exempt
 @login_required(login_url="/sketch/login/")
 def loadSketch(request):
@@ -151,6 +131,7 @@ def loadSketch(request):
     click_map = s.clickMap
 
     return HttpResponse(click_map, content_type="application/json")
+
 
 @csrf_exempt
 @login_required(login_url="/sketch/login/")
@@ -167,13 +148,16 @@ def saveSketch(request):
 def add_sketch(request):
     temp2 = request.POST['projectName']
     temp2 = temp2.split("_")[0]
-    print temp2
+    # print temp2
     p = Project.objects.get(name=temp2)
     tempName = request.user.username
     s = Sketch(project=p,
-               clickMap=json.dumps({tempName: [[], [], [], []]}))
+               #clickMap=json.dumps({tempName: [[], [], [], []]}))
+               clickMap=json.dumps({}))
     s.save()
 
-    temp = p.name + "_" + str(p.id)
-    return HttpResponseRedirect(reverse('sketch', kwargs={'project_id': temp, 'sketch_id': str(s.id)}))
+    return HttpResponse(str(s.id))
+
+    #temp = p.name  # + "_" + str(p.id)
+    #return HttpResponseRedirect(reverse('sketch', kwargs={'project_id': temp}))
 
