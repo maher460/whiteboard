@@ -1,0 +1,106 @@
+{% load staticfiles %}
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Whiteboard</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+      <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	  	
+		<link href="{% static "css/business-frontpage.css" %}" rel="stylesheet" type="text/css" />
+		<link href="{% static "css/style.css" %}" rel="stylesheet" type="text/css" />
+
+        <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
+        <script type="text/javascript" src="{% static "js/projectScripts.js" %}"></script>
+
+</head>
+<body>
+
+<nav id="nav-bar" class="navbar navbar-default" role="navigation">
+    <div id="navbar2" class="container-fluid">
+       <div class="navbar-header">
+	       <button type="button" class="navbar-toggle" data-toggle="collapse" 
+	          data-target="#example-navbar-collapse">
+	          <span class="sr-only">Toggle navigation</span>
+	          <span class="icon-bar"></span>
+	          <span class="icon-bar"></span>
+	          <span class="icon-bar"></span>
+	       </button>
+         <a href="{% url 'index'  %}">
+           <img alt="Brand" style="width:250px;height:80px;"src="{% static "img/logo5.png" %}"> </a> 
+        
+       </div>
+	   <div class="collapse navbar-collapse" id="example-navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+		<li> 
+<!--		<form action="{# url 'login'  #}"> <input type="submit" class="btn btn-default navbar-btn" value="Login">
+			  </form>  -->
+			  <a href="{% url 'login'  %}">Login </a>
+		  </li>
+	<!--	  <li>
+			  &nbsp; &nbsp; &nbsp;
+		  </li>  -->
+		<li> 
+<!--		<form action="{# url 'register_user' #}"> <input type="submit" class="btn btn-default navbar-btn" value="Register">
+			  </form> -->
+		  <a href="{% url 'register_user' %}">Register </a> </li>
+	<!--		  <li>
+				  &nbsp; &nbsp;
+			  </li> -->
+			 
+	</ul>
+     </div>
+ </div>
+
+	</nav>
+    <div class="container">
+
+        
+
+        <div class="row">
+            
+			<div id="content">
+				<p> You can use Whiteboard in these environments: </p>
+				<div id="classroom" class="col-sm-3 col-lg-3 col-md-3">
+                    <form id="formAlpha" enctype="multipart/form-data" action="{% url 'add_project' %}" method="post">{% csrf_token %}
+                        <div><label for='projectName'>Project Name</label><input type="text" name="projectName"/></div>
+                    </form>
+                    <div><label for='content'><a href="#" id="publishButton">Publish</a></label></div>
+                </div>
+
+                <div id="classroom" class="col-sm-3 col-lg-3 col-md-3">
+                    <p>Select from Existing Projects:</p>
+
+                    <form id="formBeta" enctype="multipart/form-data" action="{% url 'select_project' %}" method="post">{% csrf_token %}
+                        <div><label for='projectName'></label><input id="project_input" type="hidden" name="projectName" value = ""/></div>
+                    </form>
+
+                    {% for bridge in bridges_list %}
+
+                        <button id="{{ bridge.project.name }}" class="project_button">{{ bridge.project.name }}</button>
+
+                    {% endfor %}
+
+				</div>
+
+			</div>
+			
+		</div>
+	</div>
+
+<footer class="footer">
+      <div id="footer" class="container">
+		  <div id="footer-links" class="container">
+        <a href="{% url 'login'  %}">Contact </a> |
+		<a href="{% url 'login'  %}">About Us </a> |
+		<a href="{% url 'login'  %}">Privacy </a>
+	</div>
+      </div>
+    </footer>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</body>
+</html>
+
