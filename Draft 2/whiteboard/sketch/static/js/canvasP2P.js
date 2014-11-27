@@ -3,6 +3,8 @@ $(document).ready(function(){
 	channel = new DataChannel(project_id || 'auto-session-establishment', {
                     firebase: 'webrtc'
                 });
+
+    channel.transmitRoomOnce = false;
 	
 	/* channel = new DataChannel();
 	channel.firebase = 'webrtc-experiment';
@@ -12,6 +14,13 @@ $(document).ready(function(){
 	channel.onopen = function() {
 						console.log('CONNECTED!');
 					};
+
+    //channel.autoCloseEntireSession = true;
+    /*channel.onclose = function(){
+
+        alert("CHANNEL CLOSED!");
+
+    };*/
 
 /*    channel.onclose = function(event) {
 

@@ -15,7 +15,6 @@ from django.contrib.auth.decorators import permission_required
 import datetime
 from django.views.decorators.csrf import csrf_exempt
 import json
-from django.core.mail import send_mail
 
 # Create your views here.
 
@@ -27,32 +26,6 @@ def project(request):
     bridges_list = Bridge.objects.filter(user=request.user)
     return render_to_response('sketch/project.html', {'bridges_list': bridges_list})
 
-def contact(request):
-    loggedin= request.user.is_authenticated()
-    return render_to_response('sketch/contact.html', {'loggedin':loggedin})
-    
-@csrf_exempt
-def contactform(request):
-    name = request.POST.get('name', '')
-    email = request.POST.get('email', '')
-    comment = request.POST.get('comment', '')
-    if name and email and comment:
-        try:
-            send_mail(name, email, comment, ['whiteboardcmuq@gmail.com'], fail_silently=False)
-        except BadHeaderError:
-            return HttpResponse('Invalid header found.')
-        return HttpResponseRedirect(reverse('index'))
-    else:
-        return HttpResponse('Make sure all fields are entered and valid.') 
-    
-def about(request):
-    loggedin= request.user.is_authenticated()
-    return render_to_response('sketch/about.html', {'loggedin':loggedin})
-   
-def privacy(request):
-    loggedin= request.user.is_authenticated()
-    return render_to_response('sketch/privacy.html', {'loggedin':loggedin})
-       
 
 @csrf_exempt
 @login_required(login_url="/sketch/login/")
@@ -106,17 +79,14 @@ def select_project(request):
 
 @csrf_exempt
 def index(request):
-    loggedin= request.user.is_authenticated()
     c = {}
     c.update(csrf(request))
-    return render_to_response('sketch/index.html', {'loggedin':loggedin})
+    return render_to_response('sketch/index.html', {})
 
 
 def login(request):
-    loggedin=request.user.is_authenticated
     c = {}
     c.update(csrf(request))
-    c.update({'loggedin':loggedin})
     return render_to_response('sketch/login.html', c)
 
 
@@ -145,9 +115,7 @@ def register_user(request):
             form.save()
             return HttpResponseRedirect(reverse('login'))
     args = {}
-    loggedin=request.user.is_authenticated
     args.update(csrf(request))
-    args.update({'loggedin':loggedin})
     args['form'] = UserCreationForm()
     return render_to_response('sketch/register.html', args)
 

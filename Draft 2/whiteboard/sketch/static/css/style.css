@@ -2,10 +2,6 @@
 	padding-left:2%;
 	margin-bottom:2%;
 }
-#pages{
-	padding-left:3%;
-	padding-right:7%;
-}
 #nav-bar{
 	margin:0;
 }
@@ -86,26 +82,13 @@ body{
 	max-width:950px;
 	margin-left:auto;
 	margin-right:auto;
-
-}
-#newproject{
-	font-size:18px;
-	float:left;
-}
-#existingproj{
-	font-size:18px;
-	float:left;
-}
-#pagec{
 	border-style: solid;
 	border-width: 1px;
 	border-color: #e7e7e7;
 	border-radius: 1px;
-	max-width:950px;
-	padding-right:100px;
-	padding-bottom:3%;
-	
 }
 .navbar-inner{
 	background-color:black;
 }
+//make it have a maxwidth
+// logo empty whiteboard, univer 49 ultra light condensed

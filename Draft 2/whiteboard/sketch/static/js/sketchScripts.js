@@ -1,8 +1,13 @@
 $(document).ready(function(){
     // Drawing with the mouse
 
+    loading = false;
     $(".sketch_button").on("click", function() {
-        buttonAction(this);
+        //console.log(loading);
+        if(loading==false){
+            loading = true;
+            buttonAction(this);
+        }
     });
 
     var bempala = ".sketch:not(#" + sketch_id + ")";
@@ -41,7 +46,10 @@ $(document).ready(function(){
 
             $(".sketch_button").unbind();
             $(".sketch_button").on("click", function() {
-                buttonAction(this);
+                if(loading==false) {
+                    loading = true;
+                    buttonAction(this);
+                }
             });
 
             loadSketch(sketch_id);

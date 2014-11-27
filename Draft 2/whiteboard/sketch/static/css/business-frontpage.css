@@ -11,18 +11,11 @@
 .business-header {
 	margin:0px;
     height: 400px;
-    background: url('../img/whiteboard.jpeg') center center no-repeat scroll;
+    background: url('../img/whiteboard.jpg') center center no-repeat scroll;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
     -o-background-size: cover;
-	border-style: solid;
-	border-width: 1px;
-	border-color: #e7e7e7;
-	border-radius: 1px;
-	border-width-top:0px;
-	border-width-bottom:0px;
-	
 }
 
 /* Customize the text color and shadow color and to optimize text legibility. */

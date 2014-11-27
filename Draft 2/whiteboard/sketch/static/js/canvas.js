@@ -15,6 +15,7 @@ function loadSketch(sketch_id){
         var result = data;
         //console.log(result);
         prepareCanvas(result);
+        loading = false;
     });
 
 }
@@ -49,6 +50,8 @@ var clickColor = new Array();*/
 var paint = false;
 
 var currentColor = "#000000";
+var backup_id = "";
+var backup_color = "";
 
 function addClick(clickMap, x, y, dragging, color, user_id)
 {
@@ -92,6 +95,16 @@ function prepareCanvas(clickMap){
 
                     if(data=="clearCanvas"){
                         context = clearCanvas(context,canvas);
+                    }
+
+                    else if(data=="clear_highlighter"){
+                        setTimeout(function(){
+
+                            delete clickMap['highlighter'];
+                            context = clearCanvas(context,canvas);
+                            context = redraw_start(clickMap,context);
+
+                        }, 5000);
                     }
 
                     else{
@@ -164,13 +177,44 @@ function prepareCanvas(clickMap){
         context = redrawSlow(0, m, context,clickMap);
 
     });
+
+    $('#myonoffswitch').on('change', function() {
+        if ($(this).is(':checked')) {
+             //alert("ON");
+            backup_id = user_id;
+            user_id = "highlighter";
+            backup_color = currentColor;
+            currentColor = "#D6FF8F";
+
+        } else {
+             //alert("OFF");
+            setTimeout(function(){channel.send("clear_highlighter");}, 0);
+            user_id = backup_id;
+            currentColor = backup_color;
+            setTimeout(function(){
+
+                delete clickMap['highlighter'];
+                context = clearCanvas(context,canvas);
+                context = redraw_start(clickMap,context);
+                saveSketch(sketch_id,clickMap);
+
+            }, 5000);
+
+
+        }
+    });
+
 }
 
 function redraw(clickMap, context){
   //clearCanvas();
   context.lineJoin = "round";
-  context.lineWidth = 5;
+  context.lineWidth = 10;
+
     for(var key in clickMap){
+        if(key=="highlighter"){
+            context.lineWidth = 20;
+        }
         var value = clickMap[key];
         var clickX = value[0];
         var clickY = value[1];
@@ -198,7 +242,7 @@ function redraw(clickMap, context){
 function redraw_start(clickMap, context){
   //clearCanvas();
   context.lineJoin = "round";
-  context.lineWidth = 5;
+  context.lineWidth = 10;
     for(var key in clickMap){
         var value = clickMap[key];
         var clickX = value[0];
@@ -236,7 +280,7 @@ function redrawSlow(k, m, context, clickMap){
 function redraw_slow(k, context, clickMap){
   //clearCanvas();
   context.lineJoin = "round";
-  context.lineWidth = 5;
+  context.lineWidth = 10;
     for(var key in clickMap){
         var value = clickMap[key];
         var clickX = value[0];
