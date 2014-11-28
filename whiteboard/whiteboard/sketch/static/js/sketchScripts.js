@@ -15,6 +15,9 @@ $(document).ready(function(){
     $("#" + sketch_id).show();
 
     loadSketch(sketch_id);
+	var w=screen.width;
+	var h=screen.height-145;
+	$('#classroom').append('<canvas id="'+sketch_id+'" class="sketch" width="'+w+'" height="'+h+'" > </canvas>');
 /*     $("#drawing > #erase").click(resetCanvas);
     $("#drawing > #slow").click(function(){redrawSlow(0);}); */
 

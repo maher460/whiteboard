@@ -1,3 +1,4 @@
+
 function loadSketch(sketch_id){
     /*$.ajaxSetup({
         beforeSend: function(xhr, settings) {
@@ -75,6 +76,7 @@ function prepareCanvas(clickMap){
     //var sketch_id = $(".sketch")[0].id;
     var canvas = $("#"+sketch_id)[0];
     var context = canvas.getContext("2d");
+	
     // clearCanvas();
     //console.log(clickMap);
     context = redraw_start(clickMap, context);
@@ -203,6 +205,29 @@ function prepareCanvas(clickMap){
 
         }
     });
+    $('#blah').click(function() {
+		$(this).addClass('active')
+        backup_id = user_id;
+        user_id = "highlighter";
+        backup_color = currentColor;
+        currentColor = "#D6FF8F";
+		setTimeout(function(){
+			$('#blah').removeClass('active')
+            setTimeout(function(){channel.send("clear_highlighter");}, 0);
+            user_id = backup_id;
+            currentColor = backup_color;
+            setTimeout(function(){
+
+                delete clickMap['highlighter'];
+                context = clearCanvas(context,canvas);
+                context = redraw_start(clickMap,context);
+                saveSketch(sketch_id,clickMap);
+
+            }, 5000);
+            
+	}, 3000);
+		});
+
 
 }
 

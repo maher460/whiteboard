@@ -57,6 +57,7 @@ def privacy(request):
 @csrf_exempt
 @login_required(login_url="/sketch/login/")
 def sketch(request, project_id):
+    loggedin= request.user.is_authenticated()
     c = {}
     c.update(csrf(request))
 
@@ -70,7 +71,7 @@ def sketch(request, project_id):
 
     return render_to_response('sketch/sketch.html',
                               {'project_id': project_id, 'sketch_list': sketch_list, 'sketch_id': sketch_id,
-                               'user_id': request.user.username})
+                               'user_id': request.user.username, 'loggedin':loggedin})
 
 
 @csrf_exempt
