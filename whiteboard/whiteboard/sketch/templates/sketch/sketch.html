@@ -1,0 +1,61 @@
+{% extends "sketch/index.html" %}
+{% block content %}
+
+    <script>
+        project_id = "{{ project_id }}";
+        user_id = "{{ user_id }}";
+        sketch_id = "{{ sketch_id }}";
+    </script>
+		
+		<div id="pagec" class="container">    
+
+        <div class="row">
+            
+			<div id="content">
+
+                <div id="add">
+
+                    <form id="formGamma" enctype="multipart/form-data" action="{% url 'add_sketch' %}" method="post">{% csrf_token %}
+                        <div><label for='projectName'></label><input type="hidden" name="projectName" value={{ project_id }}/></div>
+                    </form>
+                    <button id="add_sketch">+</button>
+
+                    <button id="erase_sketch">Erase</button>
+
+                    <button id="redraw_slow">Redraw</button>
+
+                    <div class="onoffswitch">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
+                        <label class="onoffswitch-label" for="myonoffswitch">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
+
+                </div>
+
+                <div id="sketch_bar">
+
+                    {% for sketch in sketch_list %}
+
+				      <button class='sketch_button' data-panelid="{{sketch.id}}" >{{ forloop.counter }}</button>
+
+                    {% endfor %}
+
+                </div>
+
+
+				<div id="classroom" class="col-sm-3 col-lg-3 col-md-3">
+                    {% for sketch in sketch_list %}
+
+				      <canvas id="{{ sketch.id }}" class="sketch" width="800" height="500" ></canvas>
+
+                    {% endfor %}
+				</div>
+
+			</div>
+			
+		</div>
+	</div>
+
+{% endblock %}
