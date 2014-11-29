@@ -1,3 +1,21 @@
+function getCookie(name)
+	{
+	    var cookieValue = null;
+	    if (document.cookie && document.cookie != '') {
+	        var cookies = document.cookie.split(';');
+	        for (var i = 0; i < cookies.length; i++) {
+	            var cookie = jQuery.trim(cookies[i]);
+	            // Does this cookie string begin with the name we want?
+
+	            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+	                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+	                break;
+	            }
+	        }
+	    }
+	    return cookieValue;
+	}
+
 $(document).ready(function(){
     $("#publishButton").click(function(){
 		$("#formAlpha").submit();
@@ -11,7 +29,28 @@ $(document).ready(function(){
 
 	});
 
+    $(".delete_project").on("click", function(){
+        var project = $(this).parent();
+        var project_name = $(this).attr("data-panelid");
+
+
+	$.ajaxSetup({
+	     beforeSend: function(xhr, settings) {
+	         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+	             // Only send the token to relative URLs i.e. locally.
+	             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+	         }
+	     }
+	});
+        $.post("/sketch/delete_project/", {
+            project_name: project_name
+        }, function(data) {
+            project.remove();
+        });
+    });
+
 });
+
 function prepareCanvasproject(clickMap, sketch_id){
     //var sketch_id = $(".sketch")[0].id;
 
@@ -22,5 +61,5 @@ function prepareCanvasproject(clickMap, sketch_id){
 	
     // clearCanvas();
     //console.log(clickMap);
-    context = redraw_start(clickMap, context);
+    redraw_start(clickMap, context);
 }

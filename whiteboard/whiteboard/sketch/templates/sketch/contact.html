@@ -6,27 +6,27 @@
 <div id="pages"> 
 <h2> Contact Us </h2>
 <br>
-<form method="post" action="{% url 'contactform'  %}">
+<form id="contactusform" method="post" action="{% url 'contactform'  %}">
 	{% csrf_token %}
 	<div class="field-title">
 		<div class="col-lg-8">
 	<label for="name">Name:</label><br>
 	
-	<input type="text" class="form-control" name="name" value="" id="name"><br>
+	<input type="text" required="required" class="form-control" name="name" value="" id="name"><br>
 </div>
 </div>
 <br>
 	<div class="field-title">
 		<div class="col-lg-8">
 	<label for="email">Email:</label><br>
-	<input type="text" class="form-control" name="email" value="" id="email"><br>
+	<input type="text" required="required" class="form-control" name="email" value="" id="email"><br>
 </div>
 </div>
 <br>
 	<div class="field-title">
 		<div class="col-lg-8">
 	<label for="comment">Comment:</label><br>
-	<textarea rows='4' class="form-control" cols='50' name="comment" value="" id="comment">
+	<textarea rows='4'  required="required" class="form-control" cols='50' name="comment" value="" id="comment">
 </textarea><br>
 </div>
 </div>
@@ -39,4 +39,6 @@
 </div>
 </div>
 
+			<script> src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.1.47/jquery.form-validator.min.js"></script>
 {% endblock %}

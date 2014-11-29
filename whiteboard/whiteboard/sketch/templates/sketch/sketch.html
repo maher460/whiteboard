@@ -68,31 +68,16 @@
        </div>
 	   <div class="collapse navbar-collapse" id="example-navbar-collapse">
         <ul class="nav navbar-nav navbar-right">
-			{% if loggedin == False %}
-		<li> 
-<!--		<form action="{# url 'login'  #}"> <input type="submit" class="btn btn-default navbar-btn" value="Login">
-			  </form>  -->
-			  <a href="{% url 'login'  %}">Login </a>
-		  </li>
-	<!--	  <li>
-			  &nbsp; &nbsp; &nbsp;
-		  </li>  -->
-		<li> 
-<!--		<form action="{# url 'register_user' #}"> <input type="submit" class="btn btn-default navbar-btn" value="Register">
-			  </form> -->
-		  <a href="{% url 'register_user' %}">Register </a> </li>
-	<!--		  <li>
-				  &nbsp; &nbsp;
-			  </li> -->
-			{% else %} 
-			<li>
-				<a href="{% url 'project'  %}">My Projects </a>
-			</li>
-			
-			<li>
-				<a href="{% url 'logout'  %}">Logout </a>
-			</li>
-			{% endif %}
+		    <div id="login-menu" class="btn-group" role="group">
+		      <button type="button" class="btn btn-default dropdown-toggle " data-toggle="dropdown" aria-expanded="false">
+		     {{user_id}} <span class='glyphicon glyphicon-user' aria-hidden="true"></span>
+		      <span class="caret"></span>
+		    </button>
+		    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+		      <li role="presentation"><a id="add_sketch"role="menuitem" tabindex="-1" href="{% url 'project'  %}">My Projects</a></li>
+		      <li role="presentation"><a id="erase_sketch" role="menuitem" tabindex="-1" href="{% url 'logout'  %}">Logout</a></li>
+		    </ul>
+		
 	</ul>
      </div>
  </div>
@@ -104,12 +89,17 @@
 
 
 
+				<div id="classroom" class="col-sm-3 col-lg-3 col-md-3">
+                    {% for sketch in sketch_list %}
 
-				<div id="classroom" >
-<button id="controls1"  class="btn btn-default btn-lg"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> </button>
-<button id="controls2"  class="btn btn-default btn-lg"> <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> </button>
+				      <canvas id="{{ sketch.id }}" class="sketch" width="500" height="400" ></canvas>
 
+                    {% endfor %}
 				</div>
+
+             <button id="controls1"  class="btn btn-default btn-lg"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> </button>
+            <button id="controls2"  class="btn btn-default btn-lg"> <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> </button>
+
 
 			</div>
 		    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

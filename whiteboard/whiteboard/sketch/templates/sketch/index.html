@@ -56,16 +56,19 @@
 	<!--		  <li>
 				  &nbsp; &nbsp;
 			  </li> -->
-			{% else %} 
-			<li>
-				<a href="{% url 'project'  %}">My Projects </a>
-			</li>
-			
-			<li>
-				<a href="{% url 'logout'  %}">Logout </a>
-			</li>
-			{% endif %}
 	</ul>
+			{% else %} 
+		    <div id="login-menu" class="btn-group" role="group">
+		      <button type="button" class="btn btn-default dropdown-toggle " data-toggle="dropdown" aria-expanded="false">
+		     {{user_id}} <span class='glyphicon glyphicon-user' aria-hidden="true"></span>
+		      <span class="caret"></span>
+		    </button>
+		    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+		      <li role="presentation"><a id="add_sketch"role="menuitem" tabindex="-1" href="{% url 'project'  %}">My Projects</a></li>
+		      <li role="presentation"><a id="erase_sketch" role="menuitem" tabindex="-1" href="{% url 'logout'  %}">Logout</a></li>
+		    </ul>
+			{% endif %}
+
      </div>
  </div>
 

@@ -26,6 +26,7 @@ urlpatterns = patterns('',
                        url(r'^loadSketch/$', views.loadSketch, name='loadSketch'),
                        url(r'^saveSketch/$', views.saveSketch, name='saveSketch'),
                        url(r'^select_project/$', views.select_project, name='select_project'),
+                       url(r'^delete_project/$', views.delete_project, name='delete_project'),
                        url(r'^add_sketch/$', views.add_sketch, name='add_sketch'),
 
 

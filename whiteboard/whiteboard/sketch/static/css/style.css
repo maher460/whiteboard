@@ -5,13 +5,34 @@
 canvas{
 	background-image: url(../img/whiteboardgrid.jpg);
 	border: 2px solid #e7e7e7;
+	width:230px;
+	height:220px;
+	padding-right:2%;
 }
+.delete_project{
+	float:right;
+	padding-right:5%;
+	padding-top:3px;
+	
+}
+#newproject1{
+	width:240px;
+	margin-left:20%;
+}
+#login-menu{
+	margin-top:20px;
+}
+#formAlpha{
+	width:220;
+}
+
 #pages{
 	padding-left:3%;
 	padding-right:7%;
 }
 #nav-bar{
 	margin:0;
+	margin-bottom:0px;
 }
 #navbar2{
 	background-color:white;
@@ -106,7 +127,7 @@ body{
 
 #newproject{
 	font-size:18px;
-	float:left;
+	
 }
 #existingproj{
 	font-size:18px;

@@ -36,9 +36,22 @@
 						</script>
                     {% for sketch in sketch_list %}
 					<script>
-
-					$('#here').append('<div class="col-lg-4"><a href="#" id="{{ sketch.project.name }}" class="project_button"> <canvas id="'+{{sketch.id}}+'" class="sketch" width="200px" height="220px"> </canvas><br>{{ sketch.project.name  }}</a><br><br> </div> ');
-				    $.post("/sketch/loadSketch/", {
+					var w=screen.width;
+					var h=screen.height-145;
+					if(i==0){
+						$('#here').append('<div class="col-lg-4"><a href="#" id="{{ sketch.project.name }}" class="project_button"> <canvas id="'+{{sketch.id}}+'" style="margin-right:250px;" class="sketch" width="'+w+'" height="'+h+'"> </canvas><br>{{ sketch.project.name  }}</a> <a data-panelid="{{sketch.project.name}}" class="delete_project">  <button type="button" class="btn btn-default btn-sm dropdown-toggle">  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </button></a> <br><br> </div>');
+						i++;
+					}else{
+					$('#here').append('<div class="col-lg-4"><a href="#" id="{{ sketch.project.name }}" class="project_button"> <canvas id="'+{{sketch.id}}+'" class="sketch" width="'+w+'" height="'+h+'"> </canvas><br>{{ sketch.project.name  }}</a> <a data-panelid="{{sketch.project.name}}" class="delete_project">  <button type="button" class="btn btn-default btn-sm dropdown-toggle">  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </button></a> <br><br> </div>');}
+					$.ajaxSetup({ 
+						     beforeSend: function(xhr, settings) {
+						         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+						             // Only send the token to relative URLs i.e. locally.
+						             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+						         }
+						     } 
+						});
+                    $.post("/sketch/loadSketch/", {
 				        sketch_id: {{sketch.id}}
 				    }, function(data) {
 				        var result = data;

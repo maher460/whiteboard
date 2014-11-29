@@ -19,23 +19,27 @@ from django.core.mail import send_mail
 
 # Create your views here.
 
-@csrf_exempt
+
 @login_required(login_url="/sketch/login/")
 def project(request):
-    c = {}
-    c.update(csrf(request))
     bridges_list = Bridge.objects.filter(user=request.user)
-    sketch_list=[]
+    sketch_list = []
     for bridge in bridges_list:
         sketch_list.append(Sketch.objects.filter(project=bridge)[0])
-        
-    return render_to_response('sketch/project.html', {'bridges_list': bridges_list, 'sketch_list':sketch_list})
+
+    c = {'bridges_list': bridges_list, 'sketch_list': sketch_list, 'user_id':request.user.username}
+    c.update(csrf(request))
+
+    return render_to_response('sketch/project.html', c)
+
 
 def contact(request):
-    loggedin= request.user.is_authenticated()
-    return render_to_response('sketch/contact.html', {'loggedin':loggedin})
+    loggedin = request.user.is_authenticated()
+    c = {'loggedin': loggedin, 'user_id':request.user.username}
+    c.update(csrf(request))
     
-@csrf_exempt
+    return render_to_response('sketch/contact.html', c)
+
 def contactform(request):
     name = request.POST.get('name', '')
     email = request.POST.get('email', '')
@@ -47,23 +51,22 @@ def contactform(request):
             return HttpResponse('Invalid header found.')
         return HttpResponseRedirect(reverse('index'))
     else:
-        return HttpResponse('Make sure all fields are entered and valid.') 
-    
-def about(request):
-    loggedin= request.user.is_authenticated()
-    return render_to_response('sketch/about.html', {'loggedin':loggedin})
-   
-def privacy(request):
-    loggedin= request.user.is_authenticated()
-    return render_to_response('sketch/privacy.html', {'loggedin':loggedin})
-       
+        return HttpResponse('Make sure all fields are entered and valid.')
 
-@csrf_exempt
+
+def about(request):
+    loggedin = request.user.is_authenticated()
+    return render_to_response('sketch/about.html', {'loggedin': loggedin, 'user_id':request.user.username})
+
+
+def privacy(request):
+    loggedin = request.user.is_authenticated()
+    return render_to_response('sketch/privacy.html', {'loggedin': loggedin, 'user_id':request.user.username})
+
+
 @login_required(login_url="/sketch/login/")
 def sketch(request, project_id):
-    loggedin= request.user.is_authenticated()
-    c = {}
-    c.update(csrf(request))
+    loggedin = request.user.is_authenticated()
 
     p = Project.objects.get(name=project_id)
 
@@ -73,21 +76,25 @@ def sketch(request, project_id):
 
     project_id = p.name + "_id_" + str(p.id)
 
-    return render_to_response('sketch/sketch.html',
-                              {'project_id': project_id, 'sketch_list': sketch_list, 'sketch_id': sketch_id,
-                               'user_id': request.user.username, 'loggedin':loggedin})
+    c = {'project_id': project_id, 'sketch_list': sketch_list, 'sketch_id': sketch_id,
+         'user_id': request.user.username, 'loggedin': loggedin}
+    c.update(csrf(request))
+
+    return render_to_response('sketch/sketch.html', c)
 
 
-@csrf_exempt
 @login_required(login_url="/sketch/login/")
 def add_project(request):
+    if Project.objects.filter(name=request.POST['projectName']):
+        return HttpResponse("Error: Project name already exists! Please go back and choose another name!")
+
     p = Project(name=request.POST['projectName'])
     p.save()
 
     tempName = request.user.username
     s = Sketch(project=p,
-              # clickMap=json.dumps({tempName: [[], [], [], []]}))
-              clickMap=json.dumps({}))
+               # clickMap=json.dumps({tempName: [[], [], [], []]}))
+               clickMap=json.dumps({}))
     s.save()
 
     b = Bridge(user=request.user,
@@ -99,7 +106,6 @@ def add_project(request):
     return HttpResponseRedirect(reverse('sketch', kwargs={'project_id': p.name}))
 
 
-@csrf_exempt
 @login_required(login_url="/sketch/login/")
 def select_project(request):
     p = Project.objects.get(name=request.POST['projectName'])
@@ -109,23 +115,22 @@ def select_project(request):
     return HttpResponseRedirect(reverse('sketch', kwargs={'project_id': project_id}))
 
 
-@csrf_exempt
 def index(request):
-    loggedin= request.user.is_authenticated()
-    c = {}
-    c.update(csrf(request))
-    return render_to_response('sketch/index.html', {'loggedin':loggedin})
+    loggedin = request.user.is_authenticated()
+    username=request.user
+    # c = {}
+    #c.update(csrf(request))
+    return render_to_response('sketch/index.html', {'loggedin': loggedin, 'user_id':username})
 
 
 def login(request):
-    loggedin=request.user.is_authenticated
+    loggedin = request.user.is_authenticated
     c = {}
     c.update(csrf(request))
-    c.update({'loggedin':loggedin})
+    c.update({'loggedin': loggedin})
     return render_to_response('sketch/login.html', c)
 
 
-@csrf_exempt
 def auth_view(request):
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
@@ -142,7 +147,6 @@ def logout_view(request):
     return HttpResponseRedirect(reverse('index'))
 
 
-@csrf_exempt
 def register_user(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -150,9 +154,9 @@ def register_user(request):
             form.save()
             return HttpResponseRedirect(reverse('login'))
     args = {}
-    loggedin=request.user.is_authenticated
+    loggedin = request.user.is_authenticated
     args.update(csrf(request))
-    args.update({'loggedin':loggedin})
+    args.update({'loggedin': loggedin})
     args['form'] = UserCreationForm()
     return render_to_response('sketch/register.html', args)
 
@@ -161,7 +165,6 @@ def register_success(request):
     return HttpResponseRedirect(reverse('index'))
 
 
-@csrf_exempt
 @login_required(login_url="/sketch/login/")
 def loadSketch(request):
     s = Sketch.objects.get(id=int(request.POST['sketch_id']))
@@ -170,7 +173,6 @@ def loadSketch(request):
     return HttpResponse(click_map, content_type="application/json")
 
 
-@csrf_exempt
 @login_required(login_url="/sketch/login/")
 def saveSketch(request):
     s = Sketch.objects.get(id=int(request.POST['sketch_id']))
@@ -180,7 +182,6 @@ def saveSketch(request):
     return HttpResponse()
 
 
-@csrf_exempt
 @login_required(login_url="/sketch/login/")
 def add_sketch(request):
     temp2 = request.POST['projectName']
@@ -189,12 +190,20 @@ def add_sketch(request):
     p = Project.objects.get(name=temp2)
     tempName = request.user.username
     s = Sketch(project=p,
-               #clickMap=json.dumps({tempName: [[], [], [], []]}))
+               # clickMap=json.dumps({tempName: [[], [], [], []]}))
                clickMap=json.dumps({}))
     s.save()
 
     return HttpResponse(str(s.id))
 
-    #temp = p.name  # + "_" + str(p.id)
+    # temp = p.name  # + "_" + str(p.id)
     #return HttpResponseRedirect(reverse('sketch', kwargs={'project_id': temp}))
 
+
+@login_required(login_url="/sketch/login/")
+def delete_project(request):
+    print Project.objects.filter(name=request.POST['project_name'])
+    Project.objects.filter(name=request.POST['project_name']).delete()
+    print Project.objects.filter(name=request.POST['project_name'])
+
+    return HttpResponse()
