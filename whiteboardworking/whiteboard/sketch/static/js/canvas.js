@@ -243,7 +243,7 @@ function prepareCanvas(clickMap){
         }
     });*/
     $('#blah').click(function() {
-		$(this).addClass('active')
+		$(this).addClass('active');
         backup_id = user_id;
         user_id = "highlighter";
         backup_color = currentColor;
@@ -262,8 +262,8 @@ function prepareCanvas(clickMap){
 
             }, 5000);
             
-	}, 5000);
-		});
+	    }, 5000);
+	});
 
 
 }
