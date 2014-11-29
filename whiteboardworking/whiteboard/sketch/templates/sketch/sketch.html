@@ -104,12 +104,17 @@
 
 
 
+				<div id="classroom" class="col-sm-3 col-lg-3 col-md-3">
+                    {% for sketch in sketch_list %}
 
-				<div id="classroom" >
-<button id="controls1"  class="btn btn-default btn-lg"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> </button>
-<button id="controls2"  class="btn btn-default btn-lg"> <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> </button>
+				      <canvas id="{{ sketch.id }}" class="sketch" width="500" height="400" ></canvas>
 
+                    {% endfor %}
 				</div>
+
+             <button id="controls1"  class="btn btn-default btn-lg"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> </button>
+            <button id="controls2"  class="btn btn-default btn-lg"> <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> </button>
+
 
 			</div>
 		    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
