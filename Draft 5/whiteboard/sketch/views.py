@@ -27,7 +27,7 @@ def project(request):
     for bridge in bridges_list:
         sketch_list.append(Sketch.objects.filter(project=bridge)[0])
 
-    c = {'bridges_list': bridges_list, 'sketch_list': sketch_list}
+    c = {'bridges_list': bridges_list, 'sketch_list': sketch_list, 'user_id':request.user.username}
     c.update(csrf(request))
 
     return render_to_response('sketch/project.html', c)
@@ -35,8 +35,10 @@ def project(request):
 
 def contact(request):
     loggedin = request.user.is_authenticated()
-    return render_to_response('sketch/contact.html', {'loggedin': loggedin})
-
+    c = {'loggedin': loggedin, 'user_id':request.user.username}
+    c.update(csrf(request))
+    
+    return render_to_response('sketch/contact.html', c)
 
 def contactform(request):
     name = request.POST.get('name', '')
@@ -54,12 +56,12 @@ def contactform(request):
 
 def about(request):
     loggedin = request.user.is_authenticated()
-    return render_to_response('sketch/about.html', {'loggedin': loggedin})
+    return render_to_response('sketch/about.html', {'loggedin': loggedin, 'user_id':request.user.username})
 
 
 def privacy(request):
     loggedin = request.user.is_authenticated()
-    return render_to_response('sketch/privacy.html', {'loggedin': loggedin})
+    return render_to_response('sketch/privacy.html', {'loggedin': loggedin, 'user_id':request.user.username})
 
 
 @login_required(login_url="/sketch/login/")
@@ -115,9 +117,10 @@ def select_project(request):
 
 def index(request):
     loggedin = request.user.is_authenticated()
+    username=request.user
     # c = {}
     #c.update(csrf(request))
-    return render_to_response('sketch/index.html', {'loggedin': loggedin})
+    return render_to_response('sketch/index.html', {'loggedin': loggedin, 'user_id':username})
 
 
 def login(request):

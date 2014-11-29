@@ -2,22 +2,23 @@
 
 {% block content %}
 
-{% if form.errors %}
+{% if form.non_field_errors %}
+
 <p class="error">Your username and password didn't match. Please try again.</p>
 {% endif %}
 <div id="pagec" class="container">
 <div id="heading">
 <h2> Login </h2>
 <br>
-<form method="post" action="{% url 'auth_view'  %}">
+<form method="post" id="signin" action="{% url 'auth_view'  %}">
 	{% csrf_token %}
 	<div class="field-title">
 	<label for="username">User name:</label><br>
-	<input type="text" name="username" value="" id="username"><br>
+	<input type="text" required="required" name="username" value="" id="username"><br>
 </div>
 	<div class="field-title">
 	<label for="password">Password:</label><br>
-	<input type="password" name="password" value="" id="password"><br>
+	<input type="password" required="required" name="password" value="" id="password"><br>
 </div>
 <div id="submit">
 	<input type="submit" class="btn btn-default navbar-btn" value="Login">
@@ -25,4 +26,6 @@
 </form>
 </div>
 </div>
+			<script> src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.1.47/jquery.form-validator.min.js"></script>
 {% endblock %}
