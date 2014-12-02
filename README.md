@@ -2,4 +2,4 @@ Whiteboard
 ==========
 heroku app
 
-http://whiteboardcmuq.herokuapp.com/sketch/
+https://whiteboardcmuq.herokuapp.com/sketch/
