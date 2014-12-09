@@ -1,0 +1,23 @@
+Total: 132/150
+
+Idea and work: 25/30
+Implementation: 42/50
+UI: 14/15
+Security: 15/15
+Deployed: 10/10
+Proposal: 10/10
+Presentation: 16/20
+i18n: 0
+
+Comments:
+- presentation a bit artificial
+- url should have a unique identifier, project name is a bad choice
+- good challenge using webRTC
+- need a better feedback to disable buttons when redrawing
+- client side is actually challenging
+- errors in the console
+- work could have been a little bit more significant
+
+
+
+
